@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from './Home'
+import Workspace from './Workspace'
 import About from './About'
 
 export default createRouter({
@@ -8,7 +8,13 @@ export default createRouter({
   routes: [
     {
       path: '/',
-      component: Home
+      component: Workspace,
+      // 자식 페이지
+      children: [{
+        name: 'Workspace',
+        path: 'workspaces/:id',
+        component: Workspace
+      }]
     },
     {
       path: '/about',
