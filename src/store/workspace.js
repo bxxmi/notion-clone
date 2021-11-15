@@ -27,10 +27,17 @@ export default {
       console.log(workspaceList)
     },
     // 단일 워크스페이스 가져오기
-    readWorkspaceItem() {
-
+    async readWorkspaceItem({ commit }, payload) {
+      const { id } = payload
+      const workspace = await request({
+        method: 'GET',
+        workspaceId: id
+      })
+      commit('assignState', {
+        currentWorkspace: workspace
+      })
     },
-    async createWorkspace({ commit }, payload = {}) {
+    async createWorkspace({ commit, dispatch }, payload = {}) {
       const { parentId } = payload
       const currentWorkspace = await request({
         method: 'POST',
@@ -39,6 +46,7 @@ export default {
           parentId
         }
       })
+      await dispatch('readWorkspaces')
       commit('assignState', {
         currentWorkspace
       })
@@ -52,11 +60,34 @@ export default {
         }
       })
     },
-    updateWorkspace() {
-
+    async updateWorkspace({ dispatch }, payload) {
+      const { id, title, content } = payload
+      await request({
+        method: 'PUT',
+        workspaceId: id,
+        data: {
+          title,
+          content
+        }
+      })
+      await dispatch('readWorkspaces')
     },
-    deleteWorkspace() {
-
+    async deleteWorkspace({ state, dispatch }, payload) {
+      const { id } = payload
+      await request({
+        method: 'DELETE',
+        workspaceId: id
+      })
+      await dispatch('readWorkspaces')
+      // 현재 페이지의 id
+      if (id === router.currentRoute.value.params.id) {
+        router.push({
+          name: 'Workspace',
+          params: {
+            id: state.workspaceList[0].id
+          }
+        })
+      } 
     }
   }
 }

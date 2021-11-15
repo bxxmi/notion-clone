@@ -21,9 +21,12 @@ export default {
 .app__inner{
   display: flex;
   height: 100vh;
+  font-size: 14px;
+  line-height: 1.4;
+  font-family: 'Noto Sans KR', sans-serif;
+  color: $color-font;
  .app__page {
    flex-grow: 1;
-   border: 4px solid red;
    height: 100%;
   }
 } 
