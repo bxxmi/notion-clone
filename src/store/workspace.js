@@ -46,7 +46,7 @@ export default {
           parentId
         }
       })
-      await dispatch('readWorkspaces')
+      await dispatch('readWorkspaceItem')
       commit('assignState', {
         currentWorkspace
       })
@@ -61,16 +61,17 @@ export default {
       })
     },
     async updateWorkspace({ dispatch }, payload) {
-      const { id, title, content } = payload
+      const { id, title, content, poster } = payload
       await request({
         method: 'PUT',
         workspaceId: id,
         data: {
           title,
-          content
+          content,
+          poster
         }
       })
-      await dispatch('readWorkspaces')
+      await dispatch('readWorkspaceItem')
     },
     async deleteWorkspace({ state, dispatch }, payload) {
       const { id } = payload
@@ -78,7 +79,7 @@ export default {
         method: 'DELETE',
         workspaceId: id
       })
-      await dispatch('readWorkspaces')
+      await dispatch('readWorkspaceItem')
       // 현재 페이지의 id
       if (id === router.currentRoute.value.params.id) {
         router.push({
